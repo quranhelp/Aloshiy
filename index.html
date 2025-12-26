@@ -1,116 +1,214 @@
 <!DOCTYPE html>
 <html lang="uz">
 <head>
-  <meta charset="UTF-8">
-  <title>Aloshiy | Qur'on WebApp</title>
+<meta charset="UTF-8">
+<title>Aloshiy | Islomiy Mini App</title>
 
-  <!-- Telegram WebApp -->
-  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+<!-- Telegram -->
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
 
-  <!-- Bootstrap 5 -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<!-- Bootstrap -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
-  <!-- Google Font -->
-  <link href="https://fonts.googleapis.com/css2?family=Amiri&display=swap" rel="stylesheet">
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Amiri&family=Inter&display=swap" rel="stylesheet">
 
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <style>
-    body {
-      font-family: 'Amiri', serif;
-      background: linear-gradient(135deg, #0f5132, #198754);
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .card {
-      border-radius: 20px;
-      box-shadow: 0 10px 25px rgba(0,0,0,.2);
-    }
-
-    .islamic-border {
-      border: 2px solid #d4af37;
-      border-radius: 18px;
-    }
-
-    .bismillah {
-      font-size: 22px;
-      color: #198754;
-    }
-
-    .btn-islamic {
-      background: linear-gradient(135deg, #198754, #0f5132);
-      color: #fff;
-      border-radius: 12px;
-      padding: 12px;
-      font-size: 18px;
-    }
-
-    .btn-islamic:hover {
-      background: #0f5132;
-    }
-
-    .user-box {
-      background: #f8f9fa;
-      border-radius: 12px;
-      padding: 10px;
-      font-size: 16px;
-    }
-  </style>
+<style>
+body {
+  font-family: 'Inter', sans-serif;
+  background: linear-gradient(135deg,#0f5132,#198754);
+  min-height:100vh;
+  padding:20px;
+}
+.app {
+  max-width:450px;
+  margin:auto;
+  border-radius:24px;
+  border:2px solid #d4af37;
+  box-shadow:0 15px 40px rgba(0,0,0,.3);
+  padding:20px;
+  background:#f8f9fa;
+}
+.header {
+  font-family:'Amiri',serif;
+  font-size:28px;
+  color:#198754;
+}
+.box {
+  background:#fff;
+  border-radius:14px;
+  padding:12px;
+  margin-top:10px;
+  text-align:left;
+}
+.btn-islamic {
+  background:linear-gradient(135deg,#198754,#0f5132);
+  color:#fff;
+  border-radius:14px;
+  padding:14px;
+  border:none;
+  margin-top:10px;
+}
+.ayat {
+  font-family:'Amiri',serif;
+  font-size:18px;
+}
+.toggle {
+  cursor:pointer;
+  font-size:14px;
+  text-align:center;
+  margin-top:10px;
+}
+.dark {
+  background:#0b2e1e!important;
+}
+.dark .app {
+  background:#1b3d2b;
+  color:#fff;
+}
+</style>
 </head>
+
 <body>
 
-<div class="container">
-  <div class="card islamic-border p-4 text-center">
-    
-    <div class="bismillah mb-3">
-      ﷽
-    </div>
+<div id="app" class="app text-center">
 
-    <h3 class="mb-2">Assalomu alaykum</h3>
-    <p class="text-muted">Qur'on va Islomiy yordamchi WebApp</p>
+  <div class="header">﷽</div>
+  <h4>Assalomu alaykum</h4>
+  <p class="text-muted">Islomiy Telegram Mini App</p>
 
-    <div id="user" class="user-box my-3">
-      Foydalanuvchi aniqlanmoqda...
-    </div>
+  <!-- User -->
+  <div id="user" class="box">Foydalanuvchi aniqlanmoqda...</div>
 
-    <button id="btn" class="btn btn-islamic w-100 mt-3">
-      📤 Botga ma'lumot yuborish
-    </button>
+  <!-- Suralar -->
+  <select id="surahSelect" class="form-select my-2">
+    <option value="">Surani tanlang</option>
+  </select>
+  <div id="surahText" class="box">Oyatlar shu yerda chiqadi...</div>
 
-    <hr class="my-4">
+  <!-- Audio -->
+  <audio id="audioPlayer" controls class="w-100 mt-2"></audio>
 
-    <small class="text-muted">
-      🤲 Alloh ilmingizni ziyoda qilsin
-    </small>
-
+  <!-- Namoz -->
+  <div class="box my-2">
+    <b>🕌 Bugungi namoz vaqtlari</b>
+    <select id="citySelect" class="form-select my-2">
+      <option value="Tashkent">Toshkent</option>
+      <option value="Samarkand">Samarqand</option>
+      <option value="Bukhara">Buxoro</option>
+    </select>
+    <div id="prayer">Yuklanmoqda...</div>
   </div>
+
+  <!-- Sevimli oyatlar -->
+  <button id="favBtn" class="btn btn-warning w-100">💛 Sevimli qo'shish</button>
+  <div id="favList" class="box">Sevimli oyatlar shu yerda...</div>
+
+  <!-- Botga yuborish -->
+  <button id="send" class="btn-islamic w-100">📤 Botga ma’lumot yuborish</button>
+
+  <!-- Dark/Light -->
+  <div class="toggle" onclick="toggleDark()">🌙 Dark / Light</div>
+
+  <hr>
+  <small class="text-muted">Aloshiy · Qur'on & Ilm</small>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
 <script>
-  const tg = window.Telegram.WebApp;
-  tg.expand();
+/* Telegram WebApp */
+const tg = window.Telegram.WebApp;
+tg.expand();
+const user = tg.initDataUnsafe?.user;
+const userBox = document.getElementById("user");
+userBox.innerHTML = user ? `👤 <b>${user.first_name}</b><br>🆔 ${user.id}` : "Telegram orqali oching";
 
-  const user = tg.initDataUnsafe?.user;
-  const userBox = document.getElementById("user");
+/* Dark / Light */
+function toggleDark(){
+  document.body.classList.toggle("dark");
+  localStorage.setItem("theme", document.body.classList.contains("dark")?"dark":"light");
+}
+if(localStorage.getItem("theme")==="dark") document.body.classList.add("dark");
 
-  if (user) {
-    userBox.innerHTML = `
-      👤 <b>${user.first_name}</b><br>
-      🆔 ID: ${user.id}
-    `;
-  } else {
-    userBox.innerText = "Telegram orqali oching";
-  }
+/* Qur'on suralari API */
+const surahSelect = document.getElementById("surahSelect");
+const surahText = document.getElementById("surahText");
+const audioPlayer = document.getElementById("audioPlayer");
 
-  document.getElementById("btn").onclick = () => {
-    tg.sendData(JSON.stringify({
-      id: user.id,
-      name: user.first_name
-    }));
+fetch("https://api.alquran.cloud/v1/surah")
+  .then(res => res.json())
+  .then(data => {
+    data.data.forEach(surah => {
+      let option = document.createElement("option");
+      option.value = surah.number;
+      option.textContent = `${surah.number}. ${surah.englishName} (${surah.name})`;
+      surahSelect.appendChild(option);
+    });
+  });
+
+surahSelect.addEventListener("change", () => {
+  const number = surahSelect.value;
+  if (!number) return;
+  fetch(`https://api.alquran.cloud/v1/surah/${number}`)
+    .then(res => res.json())
+    .then(d => {
+      let ayatlar = d.data.ayahs.map(a => `${a.numberInSurah}. ${a.text}`).join("<br>");
+      surahText.innerHTML = ayatlar;
+      audioPlayer.src = `https://verses.quran.com/voice/192/ar.alafasy/${number}.mp3`;
+    });
+});
+
+/* Namoz vaqtlari */
+const citySelect = document.getElementById("citySelect");
+const prayerTimes = document.getElementById("prayer");
+
+function updatePrayers(city){
+  fetch(`https://api.aladhan.com/v1/timingsByCity?city=${city}&country=Uzbekistan&method=2`)
+  .then(r=>r.json())
+  .then(d=>{
+    let t=d.data.timings;
+    prayerTimes.innerHTML=
+      `Bomdod: ${t.Fajr}<br>
+       Peshin: ${t.Dhuhr}<br>
+       Asr: ${t.Asr}<br>
+       Shom: ${t.Maghrib}<br>
+       Xufton: ${t.Isha}`;
+  });
+}
+citySelect.addEventListener("change", ()=>updatePrayers(citySelect.value));
+updatePrayers(citySelect.value);
+
+/* Sevimli oyatlar */
+const favBtn = document.getElementById("favBtn");
+const favList = document.getElementById("favList");
+
+favBtn.addEventListener("click", () => {
+  let currentAyat = surahText.innerHTML;
+  if (!currentAyat) return;
+  let favs = JSON.parse(localStorage.getItem("favs")||"[]");
+  favs.push(currentAyat);
+  localStorage.setItem("favs", JSON.stringify(favs));
+  renderFavs();
+});
+
+function renderFavs(){
+  let favs = JSON.parse(localStorage.getItem("favs")||"[]");
+  favList.innerHTML = favs.join("<hr>");
+}
+renderFavs();
+
+/* Botga yuborish */
+document.getElementById("send").onclick = ()=>{
+  const data = {
+    id:user.id,
+    name:user.first_name,
+    fav: JSON.parse(localStorage.getItem("favs")||"[]")
   };
+  tg.sendData(JSON.stringify(data));
+};
 </script>
 
 </body>
