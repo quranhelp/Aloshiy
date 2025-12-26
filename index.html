@@ -2,22 +2,116 @@
 <html lang="uz">
 <head>
   <meta charset="UTF-8">
-  <title>Aloshiy WebApp</title>
+  <title>Aloshiy | Qur'on WebApp</title>
 
-  <!-- Telegram WebApp API -->
+  <!-- Telegram WebApp -->
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Bootstrap 5 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
-  <link rel="stylesheet" href="style.css">
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Amiri&display=swap" rel="stylesheet">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <style>
+    body {
+      font-family: 'Amiri', serif;
+      background: linear-gradient(135deg, #0f5132, #198754);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .card {
+      border-radius: 20px;
+      box-shadow: 0 10px 25px rgba(0,0,0,.2);
+    }
+
+    .islamic-border {
+      border: 2px solid #d4af37;
+      border-radius: 18px;
+    }
+
+    .bismillah {
+      font-size: 22px;
+      color: #198754;
+    }
+
+    .btn-islamic {
+      background: linear-gradient(135deg, #198754, #0f5132);
+      color: #fff;
+      border-radius: 12px;
+      padding: 12px;
+      font-size: 18px;
+    }
+
+    .btn-islamic:hover {
+      background: #0f5132;
+    }
+
+    .user-box {
+      background: #f8f9fa;
+      border-radius: 12px;
+      padding: 10px;
+      font-size: 16px;
+    }
+  </style>
 </head>
 <body>
 
-  <h2>Assalomu alaykum 👋</h2>
-  <p id="user"></p>
+<div class="container">
+  <div class="card islamic-border p-4 text-center">
+    
+    <div class="bismillah mb-3">
+      ﷽
+    </div>
 
-  <button id="btn">Botga ma'lumot yuborish</button>
+    <h3 class="mb-2">Assalomu alaykum</h3>
+    <p class="text-muted">Qur'on va Islomiy yordamchi WebApp</p>
 
-  <script src="script.js"></script>
+    <div id="user" class="user-box my-3">
+      Foydalanuvchi aniqlanmoqda...
+    </div>
+
+    <button id="btn" class="btn btn-islamic w-100 mt-3">
+      📤 Botga ma'lumot yuborish
+    </button>
+
+    <hr class="my-4">
+
+    <small class="text-muted">
+      🤲 Alloh ilmingizni ziyoda qilsin
+    </small>
+
+  </div>
+</div>
+
+<script>
+  const tg = window.Telegram.WebApp;
+  tg.expand();
+
+  const user = tg.initDataUnsafe?.user;
+  const userBox = document.getElementById("user");
+
+  if (user) {
+    userBox.innerHTML = `
+      👤 <b>${user.first_name}</b><br>
+      🆔 ID: ${user.id}
+    `;
+  } else {
+    userBox.innerText = "Telegram orqali oching";
+  }
+
+  document.getElementById("btn").onclick = () => {
+    tg.sendData(JSON.stringify({
+      id: user.id,
+      name: user.first_name
+    }));
+  };
+</script>
+
 </body>
 </html>
